@@ -65,12 +65,14 @@ const handleInput = (key) => {
     if (currentGuess.length >= 5) {
       state.currentGuessIndex++;
       for (var i = 0; i < currentGuess.length; i++) {
-        let c = currentGuess[state.currentGuessIndex].charAt(i);
+        let c = currentGuess[i];
         if (c == state.solution.charAt(i)) {
           state.guessedLetters.found.push(c);
           const charIndex = state.solution.indexOf(c);
-          state.guessesSplit.forEach((guess, x) => {
-            state.guessesSplit[x][charIndex] = c;
+          state.guesses.forEach((guess, x) => {
+            state.guesses[x][charIndex] = c;
+            console.log(state.guesses[x].indexOf(c, charIndex));
+
           });
         } else if (state.solution.indexOf(c) != -1) {
           state.guessedLetters.hint.push(c);
@@ -82,7 +84,7 @@ const handleInput = (key) => {
   } else if (key == "{bksp}") {
     // Remove most recent non-empty string from currentGuess array
     for (let i = currentGuess.length - 1; i >= 0; i--) {
-      if (currentGuess[i] !== "") {
+      if (currentGuess[i] !== "" && !state.guessedLetters.found.includes(currentGuess[i])) {
         currentGuess[i] = "";
         break;
       }
