@@ -13,8 +13,7 @@ const props = defineProps({
 
 const state = reactive({
   solution: "",
-  guesses: ["", "", "", "", "", ""], //each item is a 5-character string
-  guessesSplit: [
+  guesses: [
     ["", "", "", "", ""],
     ["", "", "", "", ""],
     ["", "", "", "", ""],
@@ -31,7 +30,7 @@ const state = reactive({
 });
 
 const wonGame = computed(
-  () => state.guesses[state.currentGuessIndex - 1] === state.solution,
+  () => state.guesses[state.currentGuessIndex - 1] && state.guesses[state.currentGuessIndex - 1].join("") === state.solution,
 );
 const lostGame = computed(
   () => !wonGame.value && state.currentGuessIndex >= 6
@@ -44,15 +43,15 @@ const computedClass = computed(() => {
   return className;
 });
 
-watch(
-  () => state.guesses,
-  (newGuesses) => {
-    for (let i = 0; i < state.guesses.length; i++) {
-      state.guessesSplit[i] = state.guesses[i].split("");
-    }
-  },
-  { deep: true }
-);
+// watch(
+//   () => state.guesses,
+//   (newGuesses) => {
+//     for (let i = 0; i < state.guesses.length; i++) {
+//       state.guessesSplit[i] = state.guesses[i].split("");
+//     }
+//   },
+//   { deep: true }
+// );
 
 const handleInput = (key) => {
 
@@ -60,14 +59,13 @@ const handleInput = (key) => {
     console.log("Victory!")
     return;
   }
-  const currentGuess = state.guesses[state.currentGuessIndex]
+  let currentGuess = state.guesses[state.currentGuessIndex]
 
   if (key == "{enter}") {
     if (currentGuess.length >= 5) {
-      console.log("🚀 ~ file: WordleMain.vue:60 ~ handleInput ~ Enter pressed: guess submitted")
       state.currentGuessIndex++;
       for (var i = 0; i < currentGuess.length; i++) {
-        let c = currentGuess.charAt(i);
+        let c = currentGuess[state.currentGuessIndex].charAt(i);
         if (c == state.solution.charAt(i)) {
           state.guessedLetters.found.push(c);
           const charIndex = state.solution.indexOf(c);
@@ -82,15 +80,24 @@ const handleInput = (key) => {
       }
     }
   } else if (key == "{bksp}") {
-    //REMOVE LAST LETTER
-    state.guesses[state.currentGuessIndex] =
-      currentGuess.slice(0, -1);
-  } else if (currentGuess.length < 5) {
+    // Remove most recent non-empty string from currentGuess array
+    for (let i = currentGuess.length - 1; i >= 0; i--) {
+      if (currentGuess[i] !== "") {
+        currentGuess[i] = "";
+        break;
+      }
+    }
+  } else if (currentGuess[state.currentGuessIndex].length < 5) {
     //ADD LETTER IF ALPHABETICAL
     const alphaRegex = /[a-zA-Z]/;
     if (alphaRegex.test(key)) {
-      state.guesses[state.currentGuessIndex] += key;
-      console.log("🚀 ~ file: WordleMain.vue:91 ~ handleInput ~ This key added to guesses:", key)
+      for (let i = 0; i < 5; i++) {
+        if (!currentGuess[i]) {
+          currentGuess[i] = key;
+          console.log("🚀 ~ file: WordleMain.vue:92 ~ handleInput ~ currentGuess:", currentGuess);
+          break;
+        }
+      }
     }
   }
 };
@@ -133,24 +140,16 @@ onMounted(() => {
 <template>
   <div :class="computedClass" class="d-flex flex-column align-items-center gap-4 mt-5">
     <div class="container d-flex flex-column gap-1 align-items-center">
-      <WordleRow
-      v-for="(guess, i) in state.guessesSplit"
-      :key="i"
-      :value="guess"
-      :solution="state.solution"
-      :submitted="i < state.currentGuessIndex"
-      />
+      <WordleRow v-for="(guess, i) in state.guesses" :key="i" :value="guess" :solution="state.solution"
+        :submitted="i < state.currentGuessIndex" />
     </div>
     <div class="text-center">
-      <SimpleKeyboard
-      @onKeyPress="handleInput"
-      :guessedLetters="state.guessedLetters"
-      />
+      <SimpleKeyboard @onKeyPress="handleInput" :guessedLetters="state.guessedLetters" />
     </div>
   </div>
   <div v-if="wonGame || lostGame" class="position-absolute top-50 start-50 translate-middle text-center">
-    <WordleGameOver v-if="wonGame" :class="'text-primary'" :content="'Congratulations!'"/>
-    <WordleGameOver v-if="lostGame" :class="'text-danger'" :content="'No more guesses. Play again!'"/>
+    <WordleGameOver v-if="wonGame" :class="'text-primary'" :content="'Congratulations!'" />
+    <WordleGameOver v-if="lostGame" :class="'text-danger'" :content="'No more guesses. Play again!'" />
     <button class="btn btn-outline-primary btn-lg fw-bold">Play Again</button>
   </div>
 </template>
@@ -167,13 +166,13 @@ onMounted(() => {
   width: fit-content;
 }
 
-.simple-keyboard >>> .hg-row {
+.simple-keyboard>>>.hg-row {
   display: flex;
   justify-content: center;
   padding: 0 10px 0 10px;
 }
 
-.simple-keyboard >>> .hg-button {
+.simple-keyboard>>>.hg-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -188,27 +187,33 @@ onMounted(() => {
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   transition: background-color 0.2s ease-in-out;
 }
-.simple-keyboard >>> .hg-button:hover {
+
+.simple-keyboard>>>.hg-button:hover {
   background-color: #e2e2e2;
 }
-.simple-keyboard >>> .hg-functionBtn {
+
+.simple-keyboard>>>.hg-functionBtn {
   background-color: #c9c9c9;
 }
-.simple-keyboard >>> .hg-functionBtn:hover {
-  background-color: #b3b3b3;
-}
-.simple-keyboard >>> .hg-button-enter {
-  width: 5em;
-}
-.simple-keyboard >>> .hg-standardBtn {
-  width: 1.8em;
-}
-.simple-keyboard >>> .hg-button-bksp {
-  width: 5em;
-}
-.simple-keyboard >>> .hg-button:hover,
-.simple-keyboard >>> .hg-button:active {
+
+.simple-keyboard>>>.hg-functionBtn:hover {
   background-color: #b3b3b3;
 }
 
+.simple-keyboard>>>.hg-button-enter {
+  width: 5em;
+}
+
+.simple-keyboard>>>.hg-standardBtn {
+  width: 1.8em;
+}
+
+.simple-keyboard>>>.hg-button-bksp {
+  width: 5em;
+}
+
+.simple-keyboard>>>.hg-button:hover,
+.simple-keyboard>>>.hg-button:active {
+  background-color: #b3b3b3;
+}
 </style>
