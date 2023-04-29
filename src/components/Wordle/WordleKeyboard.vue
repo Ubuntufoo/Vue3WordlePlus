@@ -27,43 +27,44 @@ onMounted(() => {
   });
 });
 
-  watch(
-    () => props.guessedLetters,
-    (guessedLetters) => {
-      keyboard.value.addButtonTheme(
-        guessedLetters.miss.join(" "),
-        "miss"
-      );
-      keyboard.value.addButtonTheme(
-        guessedLetters.found.join(" "),
-        "found"
-      );
-      keyboard.value.addButtonTheme(
-        guessedLetters.hint.join(" "),
-        "hint"
-      );
-    },
-    { deep: true }
-  );
+watch(
+  () => props.guessedLetters,
+  (guessedLetters) => {
+    keyboard.value.addButtonTheme(
+      guessedLetters.miss.join(" "),
+      "miss"
+    );
+    keyboard.value.addButtonTheme(
+      guessedLetters.found.join(" "),
+      "found"
+    );
+    keyboard.value.addButtonTheme(
+      guessedLetters.hint.join(" "),
+      "hint"
+    );
+  },
+  { deep: true }
+);
 </script>
 
 <template>
-    <div class="simple-keyboard"></div>
+  <div class="simple-keyboard"></div>
 </template>
 
 
 <style>
 div.miss {
-  background-color: RGB(108, 117, 125) !important;
+  background-color: rgba(255, 0, 0, 0.598) !important;
   color: white;
 }
+
 div.found {
-  background-color: RGB(25,135,84) !important;
+  background-color: RGB(25, 135, 84) !important;
   color: white;
 }
+
 div.hint:not(.found) {
   background-color: RGB(255, 193, 7) !important;
   color: white;
 }
-
 </style>

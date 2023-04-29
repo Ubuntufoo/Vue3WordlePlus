@@ -14,17 +14,15 @@ const props = defineProps({
 </script>
 
 <template>
-  <div
-    class="rounded text-uppercase shadow fs-1 d-flex justify-content-center align-items-center"
+  <div class="rounded text-uppercase shadow fs-1 d-flex justify-content-center align-items-center user-select-none"
     :class="{
-    'bg-secondary text-white'
-    : color == 'gray',
-    'border border-success bg-success text-white'
-    : color == 'green',
-    'border border warning bg-warning text-white'
-    : color == 'yellow',
-    }"
-  >
+      'bg-danger text-white'
+        : color == 'gray',
+      'border border-success bg-success text-white'
+        : color == 'green',
+      'border border warning bg-warning text-white'
+        : color == 'yellow',
+    }">
     {{ letter }}
   </div>
 </template>
@@ -35,4 +33,3 @@ div {
   width: 90px;
 }
 </style>
-

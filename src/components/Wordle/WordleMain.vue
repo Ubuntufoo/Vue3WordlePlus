@@ -1,6 +1,6 @@
 <!-- eslint-disable no-unused-vars -->
 <script setup>
-import { onMounted, reactive, computed, defineProps, watchEffect } from "vue";
+import { onMounted, reactive, computed } from "vue";
 import axios from 'axios';
 import SimpleKeyboard from "./WordleKeyboard.vue"
 import WordleRow from "./WordleRow.vue";
@@ -10,7 +10,7 @@ const props = defineProps({
   user: String
 });
 const state = reactive({
-  solution: "",
+  solution: "",             // initialized from API call
   guesses: [
     ["", "", "", "", ""],
     ["", "", "", "", ""],
@@ -32,7 +32,6 @@ const wonGame = computed(
 const lostGame = computed(
   () => !wonGame.value && state.currentGuessIndex >= 6
 );
-
 const computedClass = computed(() => {
   let className = '';
   if (wonGame.value || lostGame.value) {
@@ -40,7 +39,6 @@ const computedClass = computed(() => {
   }
   return className;
 });
-
 const handleInput = (key) => {
   if (state.currentGuessIndex >= 6 || wonGame.value) {
     return;
@@ -68,9 +66,7 @@ const handleInput = (key) => {
         console.log("Option 1. Its an empty", typeof (currentGuess[i]), ". continue.")
         continue;
       } else if (state.guessedLetters.found.includes(currentGuess[i]) && currentGuess[i] == state.solution[i]) {
-
         console.log("Option 2: It matches solution @index. Number of occurs in last guess:", state.guesses[state.currentGuessIndex - 1].reduce((acc, curr) => acc + (curr === currentGuess[i]), 0), ". Number of occurs in solution:", state.solution.split("").reduce((acc, curr) => acc + (curr === currentGuess[i]), 0));
-
         if (state.guesses[state.currentGuessIndex - 1].reduce((acc, curr) => acc + (curr === currentGuess[i]), 0) >= 2 && state.solution.split("").reduce((acc, curr) => acc + (curr === currentGuess[i]), 0) >= 2) {
           console.log("Option 2.1: The previous guess and the solution have 2+ of the matching character. Ignore char and continue.");
           continue;
@@ -105,15 +101,6 @@ const handleInput = (key) => {
   }
 };
 
-axios.get('https://api.datamuse.com/words?sp=?????')
-  .then(response => {
-    const randomWord = response.data[Math.floor(Math.random() * response.data.length)].word;
-    state.solution = randomWord;
-  })
-  .catch(error => {
-    console.error(error);
-  });
-
 onMounted(() => {
   window.addEventListener("keyup", (e) => {
     e.preventDefault();
@@ -138,6 +125,14 @@ onMounted(() => {
     }
   });
 });
+axios.get('https://api.datamuse.com/words?sp=?????')
+  .then(response => {
+    const randomWord = response.data[Math.floor(Math.random() * response.data.length)].word;
+    state.solution = randomWord;
+  })
+  .catch(error => {
+    console.error(error);
+  });
 </script>
 
 <template>
@@ -146,36 +141,34 @@ onMounted(() => {
       <WordleRow v-for="(guess, i) in state.guesses" :key="i" :value="guess" :solution="state.solution"
         :submitted="i < state.currentGuessIndex" />
     </div>
-    <div class="text-center">
+    <div>
       <SimpleKeyboard @onKeyPress="handleInput" :guessedLetters="state.guessedLetters" />
     </div>
   </div>
   <div v-if="wonGame || lostGame" class="position-absolute top-50 start-50 translate-middle text-center">
     <WordleGameOver v-if="wonGame" :class="'text-primary'" :content="'Congratulations!'" />
     <WordleGameOver v-if="lostGame" :class="'text-danger'" :content="'No more guesses. Play again!'" />
-    <button class="btn btn-outline-primary btn-lg fw-bold">Play Again</button>
+    <button class="btn btn-dark btn-lg fw-bold">Play Again</button>
   </div>
 </template>
 
 <style lang="css" scoped>
-/* Style the button text */
 .simple-keyboard {
   background-color: #d8d8d8;
   border-radius: 10px;
   box-shadow: 0px 0px 5px 1px #d2d2d2;
   padding: 5px;
-  margin-top: 10px;
   font-size: 1.6em;
   width: fit-content;
 }
 
-.simple-keyboard>>>.hg-row {
+.simple-keyboard :deep(.hg-row) {
   display: flex;
   justify-content: center;
   padding: 0 10px 0 10px;
 }
 
-.simple-keyboard>>>.hg-button {
+.simple-keyboard :deep(.hg-button) {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -191,32 +184,32 @@ onMounted(() => {
   transition: background-color 0.2s ease-in-out;
 }
 
-.simple-keyboard>>>.hg-button:hover {
+.simple-keyboard :deep(.hg-button:hover) {
   background-color: #e2e2e2;
 }
 
-.simple-keyboard>>>.hg-functionBtn {
+.simple-keyboard :deep(.hg-functionBtn) {
   background-color: #c9c9c9;
 }
 
-.simple-keyboard>>>.hg-functionBtn:hover {
+.simple-keyboard :deep(.hg-functionBtn:hover) {
   background-color: #b3b3b3;
 }
 
-.simple-keyboard>>>.hg-button-enter {
+.simple-keyboard :deep(.hg-button-enter) {
   width: 5em;
 }
 
-.simple-keyboard>>>.hg-standardBtn {
+.simple-keyboard :deep(.hg-standardBtn) {
   width: 1.8em;
 }
 
-.simple-keyboard>>>.hg-button-bksp {
+.simple-keyboard :deep(.hg-button-bksp) {
   width: 5em;
 }
 
-.simple-keyboard>>>.hg-button:hover,
-.simple-keyboard>>>.hg-button:active {
+.simple-keyboard :deep(.hg-button:hover),
+.simple-keyboard :deep(.hg-button:active) {
   background-color: #b3b3b3;
 }
 </style>
