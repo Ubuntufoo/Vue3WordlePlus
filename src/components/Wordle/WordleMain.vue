@@ -163,7 +163,7 @@ axios.get('https://api.datamuse.com/words?sp=?????')
     <WordleGameOver v-if="wonGame" :class="'text-primary'" :content="'Congratulations!'" />
     <WordleGameOver v-if="lostGame" :class="'text-danger'" :content="'No more guesses. Play again!'" />
     <button class="btn btn-primary btn-lg fw-bold" @click="resetGame"><a class="text-decoration-none text-white"
-        href="http://127.0.0.1:5173/">Play Again</a></button>
+        onclick="location.reload();">Play Again</a></button>
   </div>
 </template>
 
