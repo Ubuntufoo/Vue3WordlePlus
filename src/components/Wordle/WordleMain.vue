@@ -157,17 +157,41 @@ axios.get('https://api.datamuse.com/words?sp=?????')
       <SimpleKeyboard @onKeyPress="handleInput" :guessedLetters="state.guessedLetters" />
     </div>
   </div>
-  <div v-if="state.guesses[0][0] == false" class="display-1 text-warning"
-    style="transform: rotate(-45deg); position: fixed; top: 17%; left: 33%;">Wordle</div>
-  <div v-if="wonGame || lostGame" class="position-absolute top-50 start-50 translate-middle text-center">
-    <WordleGameOver v-if="wonGame" :class="'text-primary'" :content="'Congratulations!'" />
-    <WordleGameOver v-if="lostGame" :class="'text-danger'" :content="'No more guesses. Play again!'" />
-    <button class="btn btn-primary btn-lg fw-bold" @click="resetGame"><a class="text-decoration-none text-white"
-        onclick="location.reload();">Play Again</a></button>
-  </div>
+  <Transition>
+    <div v-if="state.guesses[0][0] == false">
+      <div class="display-1 text-warning" style="transform: rotate(-45deg); position: fixed; top: 14%; left: 32%;">Wordle+
+      </div>
+      <div class="display-1 fw-bold gradient-text" style="position: fixed; top: 42%; left: 30%;">Happy Mother's Day</div>
+    </div>
+  </Transition>
+  <transition>
+    <div v-if="wonGame || lostGame" class="position-absolute top-50 start-50 translate-middle text-center">
+      <WordleGameOver v-if="wonGame" :class="'text-primary'" :content="'Congratulations!'" />
+      <WordleGameOver v-if="lostGame" :class="'text-danger'" :content="'No more guesses. Play again!'" />
+      <button class="btn btn-primary btn-lg fw-bold" @click="resetGame"><a class="text-decoration-none text-white"
+          onclick="location.reload();">Play Again</a></button>
+    </div>
+  </transition>
 </template>
 
 <style lang="css" scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 1.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #eff400, #9f45ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .simple-keyboard {
   background-color: #d8d8d8;
   border-radius: 10px;

@@ -23,11 +23,23 @@ const props = defineProps({
       'border border warning bg-warning text-white'
         : color == 'yellow',
     }">
-    {{ letter }}
+    <transition>
+      <p v-if="letter" class="mt-2">{{ letter }}</p>
+    </transition>
   </div>
 </template>
 
 <style lang="css" scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
 div {
   height: 90px;
   width: 90px;
