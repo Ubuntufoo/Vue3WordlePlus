@@ -148,7 +148,7 @@ axios.get('https://api.datamuse.com/words?sp=?????')
 </script>
 
 <template>
-  <div :class="computedClass" class="d-flex flex-column align-items-center gap-3 mt-5 pt-2">
+  <div :class="computedClass" class="d-flex flex-column align-items-center gap-3 my-4 pt-2">
     <div class="container d-flex flex-column gap-1 align-items-center">
       <WordleRow v-for="(guess, i) in state.guesses" :key="i" :value="guess" :solution="state.solution"
         :submitted="i < state.currentGuessIndex" />
@@ -159,9 +159,9 @@ axios.get('https://api.datamuse.com/words?sp=?????')
   </div>
   <Transition>
     <div v-if="state.guesses[0][0] == false">
-      <div class="display-1 text-warning" style="transform: rotate(-45deg); position: fixed; top: 6%; left: 32%;">Wordle+
+      <div class="display-1 text-warning" style="transform: rotate(-45deg); position: fixed; top: 8%; left: 32%;">Wordle+
       </div>
-      <div class="display-1 fw-bold gradient-text" style="position: fixed; top: 37%; left: 28%;">Happy Mother's Day</div>
+      <div class="display-1 fw-bold gradient-text" style="position: fixed; top: 38%; left: 26%;">Happy Mother's Day</div>
     </div>
   </Transition>
   <transition>
@@ -196,7 +196,7 @@ axios.get('https://api.datamuse.com/words?sp=?????')
   background-color: #d8d8d8;
   border-radius: 10px;
   box-shadow: 0px 0px 5px 1px #d2d2d2;
-  font-size: 1.5em;
+  font-size: 1.3em;
   width: fit-content;
 }
 
