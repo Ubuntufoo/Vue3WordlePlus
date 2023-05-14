@@ -148,7 +148,7 @@ axios.get('https://api.datamuse.com/words?sp=?????')
 </script>
 
 <template>
-  <div :class="computedClass" class="d-flex flex-column align-items-center gap-4 mt-4">
+  <div :class="computedClass" class="d-flex flex-column align-items-center gap-3 mt-5 pt-2">
     <div class="container d-flex flex-column gap-1 align-items-center">
       <WordleRow v-for="(guess, i) in state.guesses" :key="i" :value="guess" :solution="state.solution"
         :submitted="i < state.currentGuessIndex" />

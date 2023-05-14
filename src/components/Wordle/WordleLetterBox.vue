@@ -41,7 +41,7 @@ const props = defineProps({
 }
 
 div {
-  height: 90px;
-  width: 90px;
+  height: 85px;
+  width: 85px;
 }
 </style>
