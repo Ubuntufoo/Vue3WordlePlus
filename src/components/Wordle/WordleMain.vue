@@ -161,7 +161,6 @@ axios.get('https://api.datamuse.com/words?sp=?????')
     <div v-if="state.guesses[0][0] == false">
       <div class="display-1 text-warning" style="transform: rotate(-45deg); position: fixed; top: 8%; left: 32%;">Wordle+
       </div>
-      <div class="display-1 fw-bold gradient-text" style="position: fixed; top: 38%; left: 26%;">Happy Mother's Day</div>
     </div>
   </Transition>
   <transition>
