@@ -14,7 +14,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="rounded text-uppercase text-center shadow fs-1 justify-content-center align-items-center user-select-none"
+  <div class="col rounded text-uppercase text-center shadow fs-1 justify-content-center align-items-center user-select-none"
     :class="{
       'bg-danger text-white'
         : color == 'gray',

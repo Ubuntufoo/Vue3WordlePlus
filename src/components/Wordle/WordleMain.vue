@@ -148,15 +148,11 @@ axios.get('https://api.datamuse.com/words?sp=?????')
 </script>
 
 <template>
-  <div class="container position-relative">
-    <div :class="computedClass" class="d-flex flex-column align-items-center gap-3 my-4 pt-2">
-      <div class="container d-flex flex-column gap-1 align-items-center">
-        <WordleRow v-for="(guess, i) in state.guesses" :key="i" :value="guess" :solution="state.solution"
-          :submitted="i < state.currentGuessIndex" />
-      </div>
-      <div>
-        <SimpleKeyboard @onKeyPress="handleInput" :guessedLetters="state.guessedLetters" />
-      </div>
+  <div class="container position-relative d-flex justify-content-center mt-4">
+    <div :class="computedClass">
+      <WordleRow v-for="(guess, i) in state.guesses" :key="i" :value="guess" :solution="state.solution"
+        :submitted="i < state.currentGuessIndex" />
+      <SimpleKeyboard @onKeyPress="handleInput" :guessedLetters="state.guessedLetters" />
     </div>
     <Transition>
       <div v-if="state.guesses[0][0] == false" id="game-title" class="display-1 text-warning">Wordle+</div>
@@ -191,10 +187,11 @@ axios.get('https://api.datamuse.com/words?sp=?????')
 }
 
 .simple-keyboard {
+  margin-top: 20px;
   background-color: #6c6c6c;
   border-radius: 10px;
   box-shadow: 0px 0px 5px 1px #d2d2d2;
-  font-size: 1.3em;
+  font-size: 1.2em;
   width: fit-content;
 }
 
