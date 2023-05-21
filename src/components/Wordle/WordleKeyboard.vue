@@ -48,11 +48,19 @@ watch(
 </script>
 
 <template>
-  <div class="simple-keyboard"></div>
+  <div id="down-size" class="simple-keyboard"></div>
 </template>
 
 
 <style>
+@media (max-width: 768px) {
+
+  /* Update the CSS selector to target the desired element */
+  #down-size {
+    font-size: 0.7em;
+  }
+}
+
 div.miss {
   background-color: rgba(255, 0, 0, 0.598) !important;
   color: white;

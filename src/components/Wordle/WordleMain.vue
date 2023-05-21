@@ -148,14 +148,14 @@ axios.get('https://api.datamuse.com/words?sp=?????')
 </script>
 
 <template>
-  <div class="container-fluid position-relative d-flex justify-content-center mt-3">
+  <div class="container position-relative d-flex justify-content-center mt-3">
     <div :class="computedClass">
       <WordleRow v-for="(guess, i) in state.guesses" :key="i" :value="guess" :solution="state.solution"
         :submitted="i < state.currentGuessIndex" />
       <SimpleKeyboard @onKeyPress="handleInput" :guessedLetters="state.guessedLetters" />
     </div>
     <Transition>
-      <div v-if="state.guesses[0][0] == false" id="game-title" class="display-1 text-warning">Wordle+</div>
+      <div v-if="state.guesses[0][0] == false" id="game-title" class="display-1 text-warning">Wordle +</div>
     </Transition>
     <transition>
       <div v-if="wonGame || lostGame" class="position-absolute top-50 start-50 translate-middle text-center">
